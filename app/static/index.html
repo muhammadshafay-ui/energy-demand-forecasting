@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Energy Demand Forecasting</title>
+<link rel="stylesheet" href="/static/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>⚡ Energy Demand Forecasting</h1>
+        <p>Hourly electricity consumption forecast (PJM East region) — powered by XGBoost</p>
+    </header>
+
+    <div class="card">
+        <label for="hoursAhead">Forecast Range</label>
+        <select id="hoursAhead">
+            <option value="24">Next 24 Hours</option>
+            <option value="48">Next 48 Hours</option>
+            <option value="72">Next 72 Hours</option>
+            <option value="168">Next 7 Days (168 Hours)</option>
+        </select>
+        <button id="predictBtn">Generate Forecast</button>
+    </div>
+
+    <div id="loading" class="loading hidden">Fetching forecast...</div>
+
+    <div id="resultCard" class="result-card hidden">
+        <div class="stat">
+            <span class="stat-label">Peak Demand</span>
+            <span class="stat-value" id="peakValue">-</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Lowest Demand</span>
+            <span class="stat-value" id="lowValue">-</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Average</span>
+            <span class="stat-value" id="avgValue">-</span>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="forecastChart"></canvas>
+    </div>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

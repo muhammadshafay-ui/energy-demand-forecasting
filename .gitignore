@@ -1,0 +1,27 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables (if you ever add any secrets/config)
+.env
+
+# Jupyter/Colab notebook checkpoints
+.ipynb_checkpoints/
+
+# OS-specific junk files
+.DS_Store
+Thumbs.db
+
+# IDE folders
+.vscode/
+.idea/
+
+# Docker
+*.log
