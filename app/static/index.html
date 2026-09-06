@@ -9,44 +9,191 @@
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>⚡ Energy Demand Forecasting</h1>
-        <p>Hourly electricity consumption forecast (PJM East region) — powered by XGBoost</p>
-    </header>
-
-    <div class="card">
-        <label for="hoursAhead">Forecast Range</label>
-        <select id="hoursAhead">
-            <option value="24">Next 24 Hours</option>
-            <option value="48">Next 48 Hours</option>
-            <option value="72">Next 72 Hours</option>
-            <option value="168">Next 7 Days (168 Hours)</option>
-        </select>
-        <button id="predictBtn">Generate Forecast</button>
-    </div>
-
-    <div id="loading" class="loading hidden">Fetching forecast...</div>
-
-    <div id="resultCard" class="result-card hidden">
-        <div class="stat">
-            <span class="stat-label">Peak Demand</span>
-            <span class="stat-value" id="peakValue">-</span>
-        </div>
-        <div class="stat">
-            <span class="stat-label">Lowest Demand</span>
-            <span class="stat-value" id="lowValue">-</span>
-        </div>
-        <div class="stat">
-            <span class="stat-label">Average</span>
-            <span class="stat-value" id="avgValue">-</span>
+<nav class="navbar">
+    <div class="nav-content">
+        <div class="logo">⚡ <span>GridCast</span></div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#forecast">Forecast</a>
+            <a href="#model">Model</a>
+            <a href="https://github.com/muhammadshafay-ui/energy-demand-forecasting" target="_blank">GitHub</a>
         </div>
     </div>
+</nav>
 
-    <div class="chart-container">
-        <canvas id="forecastChart"></canvas>
+<header class="hero">
+    <div class="hero-content">
+        <span class="badge">🟢 Live Model · XGBoost · 99.03% Accuracy</span>
+        <h1>Energy Demand Forecasting</h1>
+        <p class="hero-sub">Hourly electricity demand prediction for the PJM East grid region — built on 16 years of consumption data, powered by machine learning.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="hero-stat-value">0.97%</span>
+                <span class="hero-stat-label">MAPE (Error Rate)</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-value">86.2%</span>
+                <span class="hero-stat-label">Better than Baseline</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-value">145K+</span>
+                <span class="hero-stat-label">Training Hours</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-value">7 Days</span>
+                <span class="hero-stat-label">Max Forecast Range</span>
+            </div>
+        </div>
     </div>
-</div>
+</header>
+
+<section id="about" class="section about-section">
+    <div class="section-inner">
+        <h2>📖 About This Project</h2>
+        <p class="about-text">
+            Electricity grids can't store large amounts of power — supply has to match demand in real time.
+            Utility operators need to know, in advance, how much electricity a region will consume so they can
+            schedule power generation, avoid overloading the grid, and prevent unnecessary (expensive) emergency
+            power purchases. This tool forecasts hourly electricity demand for the PJM East grid — a real
+            regional transmission network covering part of the Eastern United States — using 16 years of
+            historical consumption data and a machine learning model trained to recognize daily, weekly, and
+            seasonal demand patterns.
+        </p>
+
+        <div class="impact-grid">
+            <div class="impact-card">
+                <div class="impact-icon">🏭</div>
+                <h3>Grid Stability</h3>
+                <p>Accurate demand forecasts help operators avoid blackouts and brownouts by ensuring enough power is generated at the right time — not too little, not too much.</p>
+            </div>
+            <div class="impact-card">
+                <div class="impact-icon">💰</div>
+                <h3>Cost Efficiency</h3>
+                <p>Buying emergency power during unexpected demand spikes is expensive. Forecasting ahead lets utilities plan cheaper, scheduled generation instead.</p>
+            </div>
+            <div class="impact-card">
+                <div class="impact-icon">🌱</div>
+                <h3>Sustainability</h3>
+                <p>Better demand planning reduces wasted energy production and supports smoother integration of renewable sources, which depend on accurate load matching.</p>
+            </div>
+            <div class="impact-card">
+                <div class="impact-icon">📊</div>
+                <h3>Data-Driven Planning</h3>
+                <p>Replaces guesswork with a model trained on real historical patterns — daily peaks, weekday/weekend shifts, and summer/winter seasonality.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="forecast" class="section forecast-section">
+    <div class="section-inner">
+        <h2>🔮 Generate a Forecast</h2>
+        <p class="section-sub">Select a time range to see predicted electricity demand, hour by hour.</p>
+
+        <div class="card controls-card">
+            <div class="control-group">
+                <label for="hoursAhead">Forecast Range</label>
+                <select id="hoursAhead">
+                    <option value="24">Next 24 Hours</option>
+                    <option value="48">Next 48 Hours</option>
+                    <option value="72">Next 72 Hours</option>
+                    <option value="168">Next 7 Days (168 Hours)</option>
+                </select>
+            </div>
+            <button id="predictBtn">
+                <span class="btn-icon">⚡</span> Generate Forecast
+            </button>
+        </div>
+
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <span>Running forecast through the model...</span>
+        </div>
+
+        <div id="resultCard" class="result-grid hidden">
+            <div class="stat-card peak">
+                <span class="stat-icon">🔺</span>
+                <span class="stat-label">Peak Demand</span>
+                <span class="stat-value" id="peakValue">-</span>
+                <span class="stat-sub" id="peakTime">-</span>
+            </div>
+            <div class="stat-card low">
+                <span class="stat-icon">🔻</span>
+                <span class="stat-label">Lowest Demand</span>
+                <span class="stat-value" id="lowValue">-</span>
+                <span class="stat-sub" id="lowTime">-</span>
+            </div>
+            <div class="stat-card avg">
+                <span class="stat-icon">📊</span>
+                <span class="stat-label">Average Demand</span>
+                <span class="stat-value" id="avgValue">-</span>
+                <span class="stat-sub" id="avgRange">-</span>
+            </div>
+            <div class="stat-card range">
+                <span class="stat-icon">📈</span>
+                <span class="stat-label">Demand Swing</span>
+                <span class="stat-value" id="swingValue">-</span>
+                <span class="stat-sub">Peak - Lowest</span>
+            </div>
+        </div>
+
+        <div id="chartCard" class="card chart-card hidden">
+            <div class="chart-header">
+                <h3>Predicted Demand Over Time</h3>
+                <button id="downloadBtn" class="download-btn">⬇ Download CSV</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="forecastChart"></canvas>
+            </div>
+        </div>
+
+        <div id="tableCard" class="card table-card hidden">
+            <button id="toggleTableBtn" class="toggle-table-btn">📋 Show Hourly Breakdown ▾</button>
+            <div id="tableWrapper" class="table-wrapper hidden">
+                <table id="forecastTable">
+                    <thead>
+                        <tr><th>Date &amp; Time</th><th>Predicted Demand (MW)</th></tr>
+                    </thead>
+                    <tbody id="forecastTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="model" class="section model-section">
+    <div class="section-inner">
+        <h2>🧠 About the Model</h2>
+        <div class="model-grid">
+            <div class="model-card">
+                <h3>Algorithm</h3>
+                <p>XGBoost Regressor — trained on 16 years of hourly consumption data (2002-2018)</p>
+            </div>
+            <div class="model-card">
+                <h3>Features Used</h3>
+                <p>Time-based (hour, day, month, season) + lag features (1h, 24h, 168h ago) + rolling averages</p>
+            </div>
+            <div class="model-card">
+                <h3>Forecasting Method</h3>
+                <p>Recursive multi-step forecasting — each predicted hour feeds into the next hour's prediction</p>
+            </div>
+            <div class="model-card">
+                <h3>Validation</h3>
+                <p>Time-aware train/test split (no shuffling) — tested only on data chronologically after training data</p>
+            </div>
+        </div>
+        <div class="metrics-bar">
+            <div class="metric"><span>MAE</span><strong>304.30 MW</strong></div>
+            <div class="metric"><span>RMSE</span><strong>408.19 MW</strong></div>
+            <div class="metric"><span>MAPE</span><strong>0.97%</strong></div>
+            <div class="metric"><span>vs. Baseline</span><strong>+86.2% better</strong></div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>Built by Muhammad Shafay · Data source: PJM Interconnection (via Kaggle) · Powered by FastAPI + XGBoost + Docker</p>
+</footer>
 
 <script src="/static/script.js"></script>
 </body>
